@@ -1,0 +1,119 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="C++ - 分离模板的声明和定义"><meta name="keywords" content="C++,泛型编程"><meta name="author" content="wxx9248"><meta name="copyright" content="wxx9248"><title>C++ - 分离模板的声明和定义 | wxx9248 的博客</title><link rel="shortcut icon" href="/images/favicon.png"><link rel="stylesheet" href="/css/index.css?version=1.9.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.0"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css?version=1.9.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><meta name="msvalidate.01" content="CB4CB0DF2D21836F8850EEC00E742DDF"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '5.4.0'
+} </script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="wxx9248 的博客" type="application/atom+xml">
+</head><body><canvas class="fireworks"></canvas><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0x00-%E5%89%8D%E8%A8%80"><span class="toc-text"> 0x00 前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x01-%E5%8E%9F%E5%9B%A0%E5%88%86%E6%9E%90"><span class="toc-text"> 0x01 原因分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B"><span class="toc-text"> 编译过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E5%8D%95%E5%85%83"><span class="toc-text"> 编译单元</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E8%AF%91"><span class="toc-text"> 编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%93%BE%E6%8E%A5"><span class="toc-text"> 链接</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E7%9A%84%E7%89%B9%E6%80%A7"><span class="toc-text"> 模板的特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B0%B4%E8%90%BD%E7%9F%B3%E5%87%BA"><span class="toc-text"> 水落石出</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x02-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-text"> 0x02 解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E8%88%AC%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-text"> 一般的解决方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E4%B8%80%E6%AD%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-text"> 进一步的解决方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A8%E8%8D%90%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-text"> 推荐的解决方法</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/images/avatar.png"></div><div class="author-info__name text-center">wxx9248</div><div class="author-info__description text-center">wxx9248's Blog</div><div class="follow-button"><a target="_blank" rel="noopener" href="https://github.com/wxx9248">关注我</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">16</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">17</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">12</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://mnihyc.com/blog">宇宙无敌超级巨佬mnihyc的博客</a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">wxx9248 的博客</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">博客首页</a><a class="site-page" href="/archives">文章总览</a><a class="site-page" href="/categories">分类</a><a class="site-page" href="/tags">标签</a><a class="site-page" href="/gallery">图库</a><a class="site-page" target="_blank" rel="noopener" href="https://www.wxx9248.tk">返回主页</a></span><span class="pull-right"></span></div><div id="post-info"><div id="post-title">C++ - 分离模板的声明和定义</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-03-20</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%A0%B9/">根</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%A0%B9/%E8%AE%A1%E7%AE%97%E6%9C%BA/">计算机</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%A0%B9/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%AF%AD%E8%A8%80/">计算机语言</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">2.4k</span><span class="post-meta__separator">|</span><span>阅读时长: 7 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h1 id="0x00-前言"><a class="markdownIt-Anchor" href="#0x00-前言"></a> 0x00 前言</h1>
+<p>当我们第一次编写C++模板的时候，基本上第一反应就是把模板函数/类当作普通函数/类对待：<br />
+把模板的声明放到一个.hpp文件中，模板的定义单独放置在一个.cpp文件中，然后其他的文件包括模板头文件。<br />
+然后我们兴高采烈地一通编译，发现链接器发出一堆莫名奇妙的“未定义引用”之呻吟……</p>
+<p>这究竟是为什么？<del>到底是人性的扭曲，还是道德的沦丧？</del></p>
+<p>本文就来探讨一下，为什么直接分离模板的声明和定义会出错，和一些常用的解决方案。</p>
+<a id="more"></a>
+<h1 id="0x01-原因分析"><a class="markdownIt-Anchor" href="#0x01-原因分析"></a> 0x01 原因分析</h1>
+<h2 id="编译过程"><a class="markdownIt-Anchor" href="#编译过程"></a> 编译过程</h2>
+<p>我们首先要清楚，编译器是怎么样编译一个工程的？</p>
+<h3 id="编译单元"><a class="markdownIt-Anchor" href="#编译单元"></a> 编译单元</h3>
+<p>首先，我们定义一个概念：编译单元。</p>
+<blockquote>
+<p>In C and C++ programming language terminology, a <strong>translation unit</strong> is the ultimate input to a C or C++ compiler from which an object file is generated. (Wikipedia)</p>
+</blockquote>
+<p>大意是，一个编译单元是让C/C++编译器产生<strong>一个</strong>目标文件的最终输入。</p>
+<p>也就是说，编译出一个目标文件所需要输入的集合，是一个编译单元。<br />
+通常情况下，编译器对每一个.cpp文件，生成一个目标文件；<br />
+所以我们一般认为：<strong>一个.cpp文件就是一个编译单元</strong>。</p>
+<h3 id="编译"><a class="markdownIt-Anchor" href="#编译"></a> 编译</h3>
+<p>对于大型工程而言，一定存在多个编译单元。那么编译器是怎样处理多个编译单元的呢？</p>
+<p>思考编译单元的定义，对于一个实打实的.cpp文件，编译器会对它单独生成一个目标文件。<br />
+而在处理一个编译单元的过程中，其他单元对编译器是<strong>完全不可见</strong>的。</p>
+<p>这也是编译单元被叫做“单元”的原因：一个编译单元就是一个逻辑块。<br />
+对编译器来讲，里面只是包含一大堆函数而已。<br />
+编译器的工作只是将每一个函数中的代码转换为机器语言，然后留一个入口标记，方便调用，仅此而已。</p>
+<p>可能有人会问，那外部函数怎么办？你说其他单元不可见，那如果其他单元的函数被调用了，怎么办？<br />
+编译器表示：这不关我的事。你说有不认识的符号？那考试的时候题不会咋办啊？<br />
+就打个标记呗。这题我不会，搁那儿不管了，我继续干我的活。</p>
+<h3 id="链接"><a class="markdownIt-Anchor" href="#链接"></a> 链接</h3>
+<p>我们知道，编译完了就该链接了嘛。</p>
+<p>链接器把目标文件都读入内存，综合分析编译器编译出来的一个个目标文件，看看怎么给编译器擦屁股。<br />
+编译器留下了一大坨它不认识的符号，链接器就说，我先给这些符号标个号呗，到时候好找。<br />
+号编完了，链接器就瞅着看着，啊这个符号我认识，在那个目标文件里呢，我写个jmp到时候让CPU跳那里执行去；<br />
+啊这个符号好像在运行库里面有，我估摸着给它也编一个号，然后也插个jmp让CPU到那里面执行去……</p>
+<p>活干完了，链接器再检查一遍卷子。<br />
+如果链接器发现，哟这里还有几个我也不认识，咋办呢？凉拌呢~甩锅给铲（产）bug的那位了，undefined reference走起~<br />
+如果链接器看着符号都有归属了，把平台的启动代码一抄，跟链接完的目标文件一粘，就输出去了。</p>
+<p><del>然后铲bug的那位陷入了运行时错误的魔爪……</del></p>
+<h2 id="模板的特性"><a class="markdownIt-Anchor" href="#模板的特性"></a> 模板的特性</h2>
+<p>模板有什么特(kēng)性(diǎn)呢？</p>
+<p>C++标准明确规定，只实例化被使用的模板，且只实例化被使用的类型。<br />
+这也就是说，编译器仅在模板<strong>被使用时</strong>生成相对应的目标代码。<br />
+当模板没有被使用时，在对应的目标代码中是看不到对应的代码的。</p>
+<p>模板这个概念仅存在于编译期间，如果你没有使用模板（给模板的泛型类型提供一个具体类型），<br />
+编译器根本无从下手，因为它要将你的代码编译为机器代码，而机器语言可没有泛型这个概念，<br />
+都是实打实的一条条语句。CPU在栈操作和进行指针运算时都需要知道具体的值，如果没有具体类型，<br />
+编译器就无法知道这个类型的空间大小，也就没有办法计算那些运算时具体需要的值。</p>
+<h2 id="水落石出"><a class="markdownIt-Anchor" href="#水落石出"></a> 水落石出</h2>
+<p>答案似乎已经很明显了。</p>
+<p>假设你的工程包括如下文件：main.cpp、template.cpp、template.hpp和Makefile</p>
+<p>template.hpp中存放了模板对应的声明，template.cpp中存放了模板的定义，<br />
+而main.cpp中直接调用了模板函数。template.cpp和main.cpp都包含了template.hpp。</p>
+<p>当编译器编译main.cpp时，发现里面只有一句函数声明（在已包含的.hpp中），而没有定义，<br />
+它认为这个可能是个外部符号，做了一个标记，输出了目标文件，把锅甩给了链接器；</p>
+<p>当编译器编译template.cpp时，发现里面有模板的声明和定义，但是好像没有啥地方使用了这个模板函数。<br />
+于是，编译器就忽略了这个模板函数，输出了一个<strong>空的</strong>目标文件；</p>
+<p>当链接器拿到这两个目标文件时，傻眼了——编译器给的main.o里面有一个外部符号，<br />
+但是在其他任何目标文件（以及系统运行库）中都找不到对应的符号……<br />
+于是它就放弃了，输出来一句“undefined reference”，丢给铲bug的自己分析去。</p>
+<h1 id="0x02-解决方案"><a class="markdownIt-Anchor" href="#0x02-解决方案"></a> 0x02 解决方案</h1>
+<h2 id="一般的解决方法"><a class="markdownIt-Anchor" href="#一般的解决方法"></a> 一般的解决方法</h2>
+<p>通常的C++入门教程，或者是图省事的答主会让你直接把定义也塞到头文件中，<br />
+这样任何.cpp文件都会充斥着模板的身影，也就不会出现找不到符号的问题了。</p>
+<p>但是这样做的话，会显著加大头文件的大小，不仅会给阅读和维护代码的人带来很多不便，<br />
+也会给预处理器和编译器造成很多负担，从而整个工程的编译都会被拖慢，既浪费时间又浪费算力。</p>
+<p>其次，这个做法无法将模板模块化。所有的模板函数都被编译到零零散散的可执行文件和动态链接库中。<br />
+这将增加程序二进制层的耦合性，使得反汇编调试更加不容易进行。</p>
+<h2 id="进一步的解决方法"><a class="markdownIt-Anchor" href="#进一步的解决方法"></a> 进一步的解决方法</h2>
+<p>有一些教程和书籍会建议将模板的定义放置在一个单独的.ipp文件中，<br />
+然后在存放模板声明的.hpp头文件的最后一行包含.ipp文件。</p>
+<p>这样做可以降低代码的维护难度，<br />
+而且当你需要你的模板能被使用者<strong>任意地实例化</strong>的话，这似乎是首选的解决方案。<br />
+大名鼎鼎的第三方C++库<a target="_blank" rel="noopener" href="https://www.boost.org">Boost</a>，<br />
+就是采用了这种方法——你可以对其中的模板传入任何合理的类型。</p>
+<p>但是这样并不能减轻编译器的负担，同样不能解决二进制层耦合的问题。<br />
+是否有更好的解决方法呢？</p>
+<h2 id="推荐的解决方法"><a class="markdownIt-Anchor" href="#推荐的解决方法"></a> 推荐的解决方法</h2>
+<p>一般推荐的方法是将模板的声明和定义分装到template.hpp和template.cpp文件中，<br />
+在template.cpp中将其他.cpp文件中所有需要的、对应类型的模板<strong>显式实例化</strong>出来，<br />
+这样编译器在编译模板定义时，就会产生模板对应的代码，链接器也就不会找不到符号了。</p>
+<p>或者你可以发挥创意，将显式实例化语句单独分离到一个temp_instantiation.hpp文件中，然后在template.cpp文件中包含它，<br />
+但是这个头文件<strong>不能</strong>被其他.cpp文件包含。</p>
+<p>同时，模板实例化后的目标代码都会存放在对应名字的目标文件中，<br />
+二进制层面的耦合性也就被解决了。<br />
+你还可以将模板实例化后的代码编译成动态链接库，随着软件分发。</p>
+<p>这种方法的唯一缺点就是，你<strong>不能任意实例化</strong>一个模板。<br />
+必须要先手动在模板<strong>定义</strong>文件中显式实例化对应的类型，才能在程序的其他地方使用。<br />
+对于未显式实例化的模板类型，链接器会爆“undefined reference”错误。</p>
+<p>示例代码：</p>
+<figure class="highlight makefile"><figcaption><span>Makefile</span></figcaption><table><tr><td class="code"><pre><span class="line">OUT=Test.exe</span><br><span class="line">OBJ= main.o template.o</span><br><span class="line">CC=g++</span><br><span class="line"></span><br><span class="line"><span class="section">Test: <span class="variable">$(OBJ)</span></span></span><br><span class="line"><span class="variable">$(CC)</span> -s -o <span class="variable">$(OUT)</span> <span class="variable">$(OBJ)</span></span><br><span class="line"></span><br><span class="line"><span class="section">main.o: template.hpp</span></span><br><span class="line"><span class="section">template.o: template.hpp</span></span><br><span class="line"></span><br><span class="line"><span class="meta"><span class="meta-keyword">.PHONY</span>: clean run</span></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">rm -rf *.exe *.o</span><br><span class="line"></span><br><span class="line"><span class="section">run:</span></span><br><span class="line">.\\<span class="variable">$(OUT)</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><figcaption><span>main.cpp</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;template.hpp&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; add(<span class="number">1</span>, <span class="number">2.0f</span>) &lt;&lt; <span class="built_in">endl</span>; <span class="comment">// 只能使用add&lt;int, float&gt;，不能使用其他类型</span></span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><figcaption><span>template.hpp</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> __TEMPLATE_HPP</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __TEMPLATE_HPP</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T1</span>, <span class="keyword">class</span> <span class="title">T2</span>&gt;</span></span><br><span class="line">auto add(const T1 &amp;a, const T2 &amp;b) -&gt; decltype (a + b);</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><figcaption><span>template.cpp</span></figcaption><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;template.hpp&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 显式实例化</span></span><br><span class="line"><span class="keyword">template</span></span><br><span class="line"><span class="keyword">auto</span> add&lt;<span class="keyword">int</span>, <span class="keyword">float</span>&gt;(<span class="keyword">const</span> <span class="keyword">int</span> &amp;a, <span class="keyword">const</span> <span class="keyword">float</span> &amp;b) -&gt; <span class="keyword">decltype</span> (a + b);</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T1</span>, <span class="keyword">class</span> <span class="title">T2</span>&gt;</span></span><br><span class="line">auto add(const T1 &amp;a, const T2 &amp;b) -&gt; decltype (a + b)</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">wxx9248</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.wxx9248.tk/2020/03/20/CPP-Seperate-Declaration-and-Definifion-of-Templates/">https://blog.wxx9248.tk/2020/03/20/CPP-Seperate-Declaration-and-Definifion-of-Templates/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.wxx9248.tk">wxx9248 的博客</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a><a class="post-meta__tags" href="/tags/%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/">泛型编程</a></div><div class="social-share pull-right" data-disabled="douban,linkedin,diandian,tencent"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/js/social-share.min.js"></script><nav id="pagination"><div class="prev-post pull-left"><a href="/2020/03/24/Bilibili-avid-bvid-Converter/"><i class="fa fa-chevron-left">  </i><span>Bilibili AV号/BV号互转工具</span></a></div><div class="next-post pull-right"><a href="/2020/02/19/Hexo-Gitalk-Tricks/"><span>在Hexo引擎上搭建Gitalk评论系统</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: 'b3b10c4c98c325194913',
+  clientSecret: 'fa95dda1dedb847f276a7c0d0eaee6912b606a35',
+  repo: 'Blog-comments',
+  owner: 'wxx9248',
+  admin: 'wxx9248',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2018 - 2021 By wxx9248</div><div class="framework-info"><span>驱动 - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file-o"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.0"></script><script src="/js/fancybox.js?version=1.9.0"></script><script src="/js/sidebar.js?version=1.9.0"></script><script src="/js/copy.js?version=1.9.0"></script><script src="/js/fireworks.js?version=1.9.0"></script><script src="/js/transition.js?version=1.9.0"></script><script src="/js/scroll.js?version=1.9.0"></script><script src="/js/head.js?version=1.9.0"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script id="ribbon" src="/js/third-party/canvas-ribbon.js" size="90" alpha="0.3" zIndex="-1" data-click="false"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>
