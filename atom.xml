@@ -6,7 +6,7 @@
   <link href="https://blog.wxx9248.tk/atom.xml" rel="self"/>
   
   <link href="https://blog.wxx9248.tk/"/>
-  <updated>2021-06-29T08:35:55.399Z</updated>
+  <updated>2021-06-29T10:49:52.270Z</updated>
   <id>https://blog.wxx9248.tk/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>国内DNS“污染”之小记</title>
+    <link href="https://blog.wxx9248.tk/2021/06/29/DNS-Pollution-Note/"/>
+    <id>https://blog.wxx9248.tk/2021/06/29/DNS-Pollution-Note/</id>
+    <published>2021-06-29T10:47:00.000Z</published>
+    <updated>2021-06-29T10:49:52.270Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="0x00-背景介绍"><a class="markdownIt-Anchor" href="#0x00-背景介绍"></a> 0x00 背景介绍</h1><p>前段时间在国外，想要下载国内版MIUI 12的刷机包，提取一下里面的Mi Pay之类的东西。按理说，这应该是很稀松平常的一件事情，去MIUI官网选型号下载就行了，结果并不是。我发现，我在国外直接打开国内版的下载网站，里面的CSS、JS、图片等资源全部缺失。<br /><img src="/images/DNS-Pollution-Note/MIUI-Malformed-Website.png" alt="错乱的MIUI下载站" /></p><span id="more"></span><p>同时，Console提示SSL证书过期：<br /><img src="/images/DNS-Pollution-Note/MIUI-Invalid-SSL-Certificate.png" alt="Console报错" /><br />我将这个情况发到了空间里，吐槽说是小米这么大个公司，连SSL证书都不及时续，而且竟然没人发现这么大个问题。我自己就开始调查这个比较神奇的现象。</p><h1 id="0x01-调查过程"><a class="markdownIt-Anchor" href="#0x01-调查过程"></a> 0x01 调查过程</h1><h2 id="诡异的静态资源服务器"><a class="markdownIt-Anchor" href="#诡异的静态资源服务器"></a> 诡异的静态资源服务器</h2><p>首先我注意到，比较致命的错误基本上都是因为小米的静态资源服务器<code>static.bbs.miui.com</code>的SSL证书过期导致的，于是我开始调查这个服务器。<br />我在新标签页打开这个网站，意料中的SSL证书错误，但是当我查看这个证书时，让我更加迷惑的事情出现了：<br /><img src="/images/DNS-Pollution-Note/MIUI-Expired-SSL-Certificate.png" alt="过期的SSL证书" /><br />这个证书已经过期了两年了。“小米这么大的公司，证书都过期了两年，都没人管吗？况且这还是MIUI下载站，这么多人访问难道就没有人发现有问题吗？”，我心想。过了一会儿，我收到国内小伙伴的回复，说是他们都正常显示出来了。在拜托国内小伙伴帮我下一份刷机包之后，我继续进行调查。<br />“如果国内的下载站显示正常，那就说明SSL证书应该没有过期。但是，一个域名在一般情况下给所有人的SSL证书应该都是一样的吧？”，突然，我意识到了一种可能性：DNS污染。</p><h2 id="被污染的dns"><a class="markdownIt-Anchor" href="#被污染的dns"></a> 被“污染”的DNS</h2><p>于是，我立刻检查国内外的DNS解析记录。我通过我在国内的节点解析<code>static.bbs.miui.com</code>在国内的记录：<br /><img src="/images/DNS-Pollution-Note/Domestic-DNS-Record.png" alt="国内的DNS解析记录" /><br />接着，我通过我的笔记本解析<code>static.bbs.miui.com</code>在国外的记录：<br /><img src="/images/DNS-Pollution-Note/Global-DNS-Record.png" alt="国外的DNS解析记录" /><br />果然，这两条记录明显不匹配。但是，有一个引人注意的地方，指示这并不是DNS污染。一般来说，被DNS污染的记录只会有一条不一直为固定值的IPv4地址，并且这个IP地址的地理位置会比较离谱，比如Google的IP被解析到韩国的一个不知名IP上：<br /><img src="/images/DNS-Pollution-Note/Google-Polluted-DNS-Record.png" alt="被污染的Google" /><br />但是小米的这个服务器并不是这种情况：有不少IP地址，里面还有不少IPv6的地址。<br />再仔细一看，我发现这个域名是个CNAME记录，它最终解析到一组名称叫<code>zxiaomipic.v.bsgslb.cn</code>的A/AAAA记录上。搜索<code>bsgslb.cn</code>后，我发现有<a href="https://www.v2ex.com/t/704603">一篇V2EX的帖子</a>提到了类似的域名：<br /><img src="/images/DNS-Pollution-Note/www.v2ex.com_t_704603.png" alt="V2EX帖子截图" /><br />这个帖子在讨论CloudFront在国内加速的问题，根据提到这个域名的层主的话来推测，这个所谓的<code>bsgslb.cn</code>，很有可能是CloudFront在国内的加速节点。<br />当我再次注意到国外的DNS解析记录的时候，我可以确定这个想法：<br /><img src="/images/DNS-Pollution-Note/Global-DNS-Record.png" alt="国外的DNS解析记录" /><br />如图所示，<code>static.bbs.miui.com</code>在国外的确被解析到了CloudFront的服务器上。</p><h1 id="0x03-遗留的问题"><a class="markdownIt-Anchor" href="#0x03-遗留的问题"></a> 0x03 遗留的问题</h1><p>如果上述猜想是正确的，那么所有的问题都可以解释了，除了一个问题：为什么使用了相同的CDN，SSL证书却不同步呢？这个问题<s>我暂且蒙古里</s>得去了解一下CloudFront的运作方式了。<br />再就是不太清楚区域DNS是我国独有还是哪个地方都有，因为我记得上次栗子发过来某省考试院的域名在国外直接<code>NXDOMAIN</code>，当时也很纳闷这个问题。</p>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;0x00-背景介绍&quot;&gt;&lt;a class=&quot;markdownIt-Anchor&quot; href=&quot;#0x00-背景介绍&quot;&gt;&lt;/a&gt; 0x00 背景介绍&lt;/h1&gt;
+&lt;p&gt;前段时间在国外，想要下载国内版MIUI 12的刷机包，提取一下里面的Mi Pay之类的东西。按理说，这应该是很稀松平常的一件事情，去MIUI官网选型号下载就行了，结果并不是。我发现，我在国外直接打开国内版的下载网站，里面的CSS、JS、图片等资源全部缺失。&lt;br /&gt;
+&lt;img src=&quot;/images/DNS-Pollution-Note/MIUI-Malformed-Website.png&quot; alt=&quot;错乱的MIUI下载站&quot; /&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="根" scheme="https://blog.wxx9248.tk/categories/%E6%A0%B9/"/>
+    
+    <category term="计算机" scheme="https://blog.wxx9248.tk/categories/%E6%A0%B9/%E8%AE%A1%E7%AE%97%E6%9C%BA/"/>
+    
+    <category term="应用" scheme="https://blog.wxx9248.tk/categories/%E6%A0%B9/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E5%BA%94%E7%94%A8/"/>
+    
+    <category term="信息安全" scheme="https://blog.wxx9248.tk/categories/%E6%A0%B9/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E5%BA%94%E7%94%A8/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/"/>
+    
+    
+    <category term="DNS" scheme="https://blog.wxx9248.tk/tags/DNS/"/>
+    
+    <category term="小记" scheme="https://blog.wxx9248.tk/tags/%E5%B0%8F%E8%AE%B0/"/>
+    
+  </entry>
   
   <entry>
     <title>密码学基本概念与相关协议入门（长期更新）</title>

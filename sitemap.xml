@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://blog.wxx9248.tk/2021/06/29/DNS-Pollution-Note/</loc>
+    
+    <lastmod>2021-06-29</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://blog.wxx9248.tk/2021/06/29/Cryptography-Introduction/</loc>
     
     <lastmod>2021-06-29</lastmod>
@@ -334,6 +341,20 @@
   
   <url>
     <loc>https://blog.wxx9248.tk/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/</loc>
+    <lastmod>2021-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.wxx9248.tk/tags/DNS/</loc>
+    <lastmod>2021-06-29</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://blog.wxx9248.tk/tags/%E5%B0%8F%E8%AE%B0/</loc>
     <lastmod>2021-06-29</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
