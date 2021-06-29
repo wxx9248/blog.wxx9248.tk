@@ -1,0 +1,105 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="使用 Python 编写 Cloudflare DDNS 系统"><meta name="keywords" content="Python"><meta name="author" content="wxx9248"><meta name="copyright" content="wxx9248"><title>使用 Python 编写 Cloudflare DDNS 系统 | wxx9248 的博客</title><link rel="shortcut icon" href="/manifest/favicon.png"><link rel="stylesheet" href="/css/index.css?version=1.9.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.0"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css?version=1.9.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@latest/dist/gitalk.min.js"></script><script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2.10.0/js/md5.min.js"></script><link rel="manifest" href="/manifest/manifest.json"><link rel="manifest" href="/manifest/manifest.json"><meta name="theme-color" content="#000000"><meta name="msapplication-TileColor" content="#000000"><link rel="apple-touch-icon" sizes="180x180" href="/manifest/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/manifest/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/manifest/favicon-16x16.png"><link rel="mask-icon" href="/manifest/maskable_icon.png" color="#000000"><meta name="msvalidate.01" content="CB4CB0DF2D21836F8850EEC00E742DDF"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '5.4.0'
+} </script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="wxx9248 的博客" type="application/atom+xml">
+</head><body><canvas class="fireworks"></canvas><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0x00-%E5%89%8D%E8%A8%80"><span class="toc-text"> 0x00 前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x01-%E5%B7%A5%E7%A8%8B%E6%91%98%E8%A6%81"><span class="toc-text"> 0x01 工程摘要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x02-%E4%B8%BB%E8%A6%81%E7%89%B9%E6%80%A7"><span class="toc-text"> 0x02 主要特性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x03-%E5%8F%82%E6%95%B0%E8%AE%BE%E7%BD%AE"><span class="toc-text"> 0x03 参数设置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x04-%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-text"> 0x04 使用方法</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/images/avatar.png"></div><div class="author-info__name text-center">wxx9248</div><div class="author-info__description text-center">wxx9248's Blog</div><div class="follow-button"><a target="_blank" rel="noopener" href="https://github.com/wxx9248">关注我</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">19</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">21</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">13</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://mnihyc.com/blog">宇宙无敌超级巨佬mnihyc的博客</a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">wxx9248 的博客</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">博客首页</a><a class="site-page" href="/archives">文章总览</a><a class="site-page" href="/categories">分类</a><a class="site-page" href="/tags">标签</a><a class="site-page" href="/gallery">图库</a><a class="site-page" href="/slides">幻灯片</a><a class="site-page" target="_blank" rel="noopener" href="//www.wxx9248.tk">返回主页</a></span><span class="pull-right"></span></div><div id="post-info"><div id="post-title">使用 Python 编写 Cloudflare DDNS 系统</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-02-16</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%A0%B9/">根</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%A0%B9/%E8%AE%A1%E7%AE%97%E6%9C%BA/">计算机</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%A0%B9/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E5%BA%94%E7%94%A8/">应用</a><i class="fa fa-angle-right" aria-hidden="true"></i><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%A0%B9/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E5%BA%94%E7%94%A8/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/">软件工程</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">496</span><span class="post-meta__separator">|</span><span>阅读时长: 1 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h1 id="0x00-前言"><a class="markdownIt-Anchor" href="#0x00-前言"></a> 0x00 前言</h1>
+<p>最近在学习Python语言。因为Python的功能库太过庞大，内置对象的常用函数的记忆成了一个问题。<br />
+所以准备开一个Python坑来将自己学到的理论知识付诸实践。</p>
+<p>刚好发现原来的开MC服务器的时候，用批处理（对没错就是Windows的屑批处理）写过一个Cloudflare（以下简称CF）的DDNS脚本。<br />
+由于批处理处理JSON的时候非常不灵活，代码晦涩难懂，而且非常依赖于CF API返回JSON的结构。只要一点点不一样就可以出让你想不到的bug……<br />
+所以就打算把这个脚本用Python重写一版，以后或许自己还能用上。</p>
+<span id="more"></span>
+<h1 id="0x01-工程摘要"><a class="markdownIt-Anchor" href="#0x01-工程摘要"></a> 0x01 工程摘要</h1>
+<ul>
+<li>项目地址：	<a target="_blank" rel="noopener" href="https://github.com/wxx9248/Cloudflare-DDNS-System">https://github.com/wxx9248/Cloudflare-DDNS-Systems</a></li>
+<li>界面语言：	英文</li>
+<li>当前版本：	v2.0</li>
+<li>实现语言：	Python 3.8.1</li>
+<li>支持平台：	理论主流平台均支持。</li>
+<li>开源协议：	GPL v3</li>
+<li>总代码量：	904行</li>
+<li>外来模块：	<a target="_blank" rel="noopener" href="https://pypi.org/project/pycryptodome">PyCryptodome</a></li>
+</ul>
+<h1 id="0x02-主要特性"><a class="markdownIt-Anchor" href="#0x02-主要特性"></a> 0x02 主要特性</h1>
+<ul>
+<li>多域名支持</li>
+<li>IPv6支持</li>
+<li>接受专用<code>API token</code>和全局<code>API key</code></li>
+<li>使用<code>AES-EAX</code>加密<code>API token</code>或<code>API key</code></li>
+<li>使用JSON存储配置，便于修改</li>
+<li>我编不下去了</li>
+</ul>
+<h1 id="0x03-参数设置"><a class="markdownIt-Anchor" href="#0x03-参数设置"></a> 0x03 参数设置</h1>
+<p>于<code>DDNSMon.py</code>：</p>
+<ul>
+<li>可修改变量<code>SLEEPSEC</code>：DDNS的轮询休眠时长，单位是秒。</li>
+</ul>
+<p>于<code>conf.json</code>：</p>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>值类型</th>
+<th>描述</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Zone-ID</code></td>
+<td>字符串：32位 hex token</td>
+<td>DNS Zone标识符</td>
+<td><code>&quot;53f2f9875a13605a67a666e58353f549&quot;</code></td>
+</tr>
+<tr>
+<td><code>Domains</code></td>
+<td>字符串数组</td>
+<td>目标域名</td>
+<td><code>[&quot;ddns1.wxx9248.tk&quot;, &quot;ddns2.wxx9248.tk&quot;]</code></td>
+</tr>
+<tr>
+<td><code>E-mail</code></td>
+<td>字符串</td>
+<td>CF帐户邮箱</td>
+<td><code>&quot;wxx9248@wxx9248.tk&quot;</code></td>
+</tr>
+<tr>
+<td><code>APIKey</code></td>
+<td>字符串：32位 hex token 或 base64</td>
+<td><code>API key</code> 或者 <code>API token</code></td>
+<td><code>&quot;55c3047806f47ccd5dcb64c9cc2bcb50&quot;</code></td>
+</tr>
+</tbody>
+</table>
+<p>剩下的参数请不要直接修改，推荐将<code>conf.json</code>删除，然后进入程序，按照提示输入信息。</p>
+<h1 id="0x04-使用方法"><a class="markdownIt-Anchor" href="#0x04-使用方法"></a> 0x04 使用方法</h1>
+<ul>
+<li>Windows：
+<ul>
+<li>如果Python文件关联正确，直接双击<code>DDNSMon.py</code>运行即可。</li>
+<li>如果此方法不行，参见下一种方法。</li>
+</ul>
+</li>
+<li>其它系统（命令行操作）： <code>Python3 DDNSMon.py</code></li>
+</ul>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">wxx9248</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.wxx9248.tk/2020/02/16/Project-Cloudflare-DDNS-System/">https://blog.wxx9248.tk/2020/02/16/Project-Cloudflare-DDNS-System/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.wxx9248.tk">wxx9248 的博客</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Python/">Python</a></div><div class="social-share pull-right" data-disabled="douban,linkedin,diandian,tencent"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/js/social-share.min.js"></script><nav id="pagination"><div class="prev-post pull-left"><a href="/2020/02/19/Destr0yer-Lyrics-Translation/"><i class="fa fa-chevron-left">  </i><span>《Destr0yer》 歌词翻译</span></a></div><div class="next-post pull-right"><a href="/2019/11/09/Algorithm-DNA-Translation/"><span>ZSTUOJ - DNA Translation</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="gitalk-container"></div><script>var gitalk = new Gitalk({
+  clientID: 'b3b10c4c98c325194913',
+  clientSecret: 'fa95dda1dedb847f276a7c0d0eaee6912b606a35',
+  repo: 'Blog-comments',
+  owner: 'wxx9248',
+  admin: 'wxx9248',
+  id: md5(decodeURI(location.pathname)),
+  language: 'zh-CN'
+})
+gitalk.render('gitalk-container')</script></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2018 - 2021 By wxx9248</div><div class="framework-info"><span>驱动 - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file-o"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.0"></script><script src="/js/fancybox.js?version=1.9.0"></script><script src="/js/sidebar.js?version=1.9.0"></script><script src="/js/copy.js?version=1.9.0"></script><script src="/js/fireworks.js?version=1.9.0"></script><script src="/js/transition.js?version=1.9.0"></script><script src="/js/scroll.js?version=1.9.0"></script><script src="/js/head.js?version=1.9.0"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script id="ribbon" src="/js/third-party/canvas-ribbon.js" size="90" alpha="0.3" zIndex="-1" data-click="false"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>
